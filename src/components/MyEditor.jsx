@@ -1,19 +1,51 @@
 import MonacoEditor from "@monaco-editor/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SERVER_ADDRESS from "../utils/global/serverAddress";
-import LanguageDropdown from "./Dropdown";
+import LanguageDropdown from "./LanguageDropdown";
+import InputOutputPannel from "./InputOutputBox";
 
-function MyEditor({ title, language, fileExtension }) {
+const editorDefaultValues = {
 
-  const [ideTitle, setIdeTitle] = useState(title);
+  "cpp": {
+    title: "C++ Online Compiler",
+    fileExtension: "cpp",
+    code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!";\n    return 0;\n}`
+  },
+  "java": {
+    title: "Java Online Compiler",
+    fileExtension: "java",
+    code: `class Main {\r\n    public static void main(String[] args) {\r\n        System.out.println(\"Hello, World!\"); \r\n    }\r\n}`
+  },
+  "python": {
+    title: "Python Online Compiler",
+    fileExtension: "py",
+    code: "a = 10\r\nb = 20\r\nprint(\"SUM OF TWO NUMBER IS: \", a+b)"
+  }
+};
+
+function MyEditor({ language }) {
+
+  if (language != "cpp" && language != "java" && language != "python")
+    throw new Error("Invalid language, available lanauge {cpp, java, python}");
+
+  const [ideTitle, setIdeTitle] = useState(editorDefaultValues[language]["title"]);
   const [ideLanguage, setIdeLanguage] = useState(language);
-  const [ideFileExtension, setIdeFileExtension] = useState(fileExtension);
+  const [ideFileExtension, setIdeFileExtension] = useState(editorDefaultValues[language]["fileExtension"]);
 
-  const [code, setCode] = useState(`#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!";\n    return 0;\n}`);
+  const [code, setCode] = useState(editorDefaultValues[language]["code"]);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [isRunning, setIsRunning] = useState(false); // For showing a loader
+
+  useEffect(() => {
+    if (ideLanguage === "cpp" || ideLanguage !== language) { // Only update if language is different
+      setIdeTitle(editorDefaultValues[ideLanguage]["title"]);
+      setIdeFileExtension(editorDefaultValues[ideLanguage]["fileExtension"]);
+      setCode(editorDefaultValues[ideLanguage]["code"]);
+      language = ideLanguage;
+    }
+  }, [ideLanguage, language]);
 
 
   async function executeCodeHandler() {
@@ -24,8 +56,6 @@ function MyEditor({ title, language, fileExtension }) {
         input: input,
         code: code,
       };
-
-      console.log("Executing Code:", payload);
 
       const response = await axios.post(`${SERVER_ADDRESS}/online-compiler/run-code`, payload);
 
@@ -48,12 +78,13 @@ function MyEditor({ title, language, fileExtension }) {
       <FilenameAndRunbutton />
 
       {/* Code Editor + Input/Output Panel */}
-      <div className="flex flex-col lg:flex-row flex-1 border border-[#282828] rounded-b-md overflow-hidden">
+      <div className="flex flex-col lg:flex-row flex-1 border border-[#282828] rounded-b-md">
         {/* Code Editor */}
         <div className="flex-[3]">
           <MonacoEditor
             height="100%"
-            defaultLanguage={language}
+            defaultLanguage={"cpp"}
+            language={ideLanguage}
             theme="vs-dark"
             value={code}
             onChange={(newCode) => setCode(newCode)}
@@ -66,7 +97,8 @@ function MyEditor({ title, language, fileExtension }) {
         </div>
 
         {/* Input & Output Panel */}
-        <InputOutputPannel />
+        <InputOutputPannel input={input} setInput={setInput} output={output} />
+
 
       </div>
     </div>
@@ -91,31 +123,6 @@ function MyEditor({ title, language, fileExtension }) {
     )
   }
 
-  function InputOutputPannel() {
-    return <div className="flex-1/3 lg:flex-1/12 flex flex-col  bg-[#1e1e1e] border-l border-[#282828]">
-      {/* Input Box */}
-      <div className="flex flex-col flex-1 p-2">
-        <span className="text-[#D4D4D4] text-center font-medium w-full border-b border-[#282828]">
-          INPUT
-        </span>
-        <textarea
-          className="p-2 w-full h-full text-[#D4D4D4] bg-[#1e1e1e] focus:outline-none resize-none"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-        />
-      </div>
-
-      {/* Output Box */}
-      <div className="flex flex-col flex-1 p-2 border-t border-[#282828]">
-        <span className="text-[#D4D4D4] text-center font-medium w-full border-b border-[#282828]">
-          OUTPUT
-        </span>
-        <div className="p-2 w-full h-full text-[#D4D4D4] bg-[#1e1e1e] overflow-scroll">
-          {output}
-        </div>
-      </div>
-    </div>
-  }
 }
 
 export default MyEditor;

@@ -1,14 +1,10 @@
-import { useState } from "react";
-import EditorFactory from "./utils/EditorFactory";
-import HomePage from "./pages/HomePage";
+import MyEditor from "./components/MyEditor";
+import SERVER_ADDRESS from "./utils/global/serverAddress";
 
 function App() {
-
+  
   return (
-      <EditorFactory 
-      language={"CPP"} 
-    />
-    // <HomePage /> 
+    <MyEditor language={"cpp"} />
   );
 }
 
