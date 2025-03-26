@@ -1,12 +1,21 @@
-# React + Vite
+# Online IDE Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the **frontend application** for the Online IDE. It provides a web-based interface for users to write, run, and test code in multiple programming languages.
 
-Currently, two official plugins are available:
+## 🚀 Features
+- Intuitive UI for writing and running code
+- Supports **Java**, **C++**, and **Python**
+- Integrated with the backend for code execution
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack
+- **React**: For building the user interface
+- **Axios**: For making API requests
+- **Monaco Editor**: For providing a code editor experience
 
-## Expanding the ESLint configuration
+## 🧑‍💻 Backend Repository
+The backend service responsible for code execution is available here:
+[Online IDE Backend](https://github.com/Aviral-Gupta101/online-ide-backend)
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🌐 Live URL
+You can access the live version of the frontend here: 
+[Online IDE Frontend](https://online-ide-frontend.netlify.app)
