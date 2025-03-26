@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/online-compiler/*"
+  to = "http://185.199.52.100:4444/online-compiler/:splat"
+  status = 200
+  force = true

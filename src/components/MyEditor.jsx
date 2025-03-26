@@ -57,7 +57,7 @@ function MyEditor({ language }) {
         code: code,
       };
 
-      const response = await axios.post(`${SERVER_ADDRESS}/online-compiler/run-code`, payload);
+      const response = await axios.post(`/online-compiler/run-code`, payload);
 
       setOutput(response.data.output || "Execution Complete!");
     } catch (error) {
